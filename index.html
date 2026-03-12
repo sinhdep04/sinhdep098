@@ -304,55 +304,77 @@
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full overflow-auto scroll-smooth">
-  <div id="app" class="min-h-full w-full">
-   <!-- Header -->
+  <div id="app" class="min-h-full w-full"><!-- Header -->
    <header class="text-center py-8 px-4 border-b border-purple-600/30">
     <h1 id="app-title" class="text-4xl md:text-5xl font-bold mb-3 header-glow">🐝 Bee Swarm Simulator</h1>
     <h2 id="section-label" class="text-2xl md:text-3xl font-semibold text-purple-300 mb-2">Công Thức Chế Tạo Mặt Nạ</h2>
     <p class="text-gray-400 max-w-2xl mx-auto">Hướng dẫn chi tiết nguyên liệu cần để chế tạo các loại mặt nạ mạnh nhất trong game 🎭</p>
    </header><!-- Content -->
-   <div class="max-w-6xl mx-auto p-4 md:p-8">
-    <!-- Tracker Section -->
+   <div class="max-w-6xl mx-auto p-4 md:p-8"><!-- Tracker Section -->
     <section class="tracker-section">
-     <h3 class="text-2xl font-bold mb-6 text-purple-300">📊 Theo dõi Tiến Trình Chế Tạo</h3>
+     <div class="flex items-center justify-between mb-6">
+      <h3 class="text-2xl font-bold text-purple-300">📊 Theo dõi Tiến Trình Chế Tạo</h3>
+      <div class="flex gap-3">
+       <button id="export-btn" class="craft-button" style="width: auto; margin-top: 0; padding: 8px 16px; font-size: 0.9rem;">📋 Sao chép</button> <button id="import-btn" class="craft-button" style="width: auto; margin-top: 0; padding: 8px 16px; font-size: 0.9rem;">📥 Dán</button>
+      </div>
+     </div>
      <div class="tracker-input-row">
-      <div class="tracker-input-group"><label for="honey-input">💰 Honey</label> <input type="number" id="honey-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="honey-input">💰 Honey</label> <input type="number" id="honey-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="gold-egg-input">🥚 Gold Egg</label> <input type="number" id="gold-egg-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="gold-egg-input">🥚 Gold Egg</label> <input type="number" id="gold-egg-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="oil-input">🛢️ Oil</label> <input type="number" id="oil-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="oil-input">🛢️ Oil</label> <input type="number" id="oil-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="enzymes-input">🧪 Enzymes</label> <input type="number" id="enzymes-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="enzymes-input">🧪 Enzymes</label> <input type="number" id="enzymes-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="red-extract-input">🔴 Red Extract</label> <input type="number" id="red-extract-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="red-extract-input">🔴 Red Extract</label> <input type="number" id="red-extract-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="stinger-input">⚡ Stinger</label> <input type="number" id="stinger-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="stinger-input">⚡ Stinger</label> <input type="number" id="stinger-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="strawberry-input">🍓 Strawberry</label> <input type="number" id="strawberry-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="strawberry-input">🍓 Strawberry</label> <input type="number" id="strawberry-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="blue-extract-input">🔵 Blue Extract</label> <input type="number" id="blue-extract-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="blue-extract-input">🔵 Blue Extract</label> <input type="number" id="blue-extract-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="glitter-input">✨ Glitter</label> <input type="number" id="glitter-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="glitter-input">✨ Glitter</label> <input type="number" id="glitter-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="blueberry-input">🫐 Blueberry</label> <input type="number" id="blueberry-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="blueberry-input">🫐 Blueberry</label> <input type="number" id="blueberry-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="glue-input">💧 Glue</label> <input type="number" id="glue-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="glue-input">💧 Glue</label> <input type="number" id="glue-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="diamond-egg-input">💎 Diamond Egg</label> <input type="number" id="diamond-egg-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="diamond-egg-input">💎 Diamond Egg</label> <input type="number" id="diamond-egg-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="treats-input">🍬 Treats</label> <input type="number" id="treats-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="treats-input">🍬 Treats</label> <input type="number" id="treats-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="pineapple-input">🍍 Pineapple</label> <input type="number" id="pineapple-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="pineapple-input">🍍 Pineapple</label> <input type="number" id="pineapple-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="moon-charm-input">🌙 Moon Charm</label> <input type="number" id="moon-charm-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="moon-charm-input">🌙 Moon Charm</label> <input type="number" id="moon-charm-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="gumdrop-input">🔴 Gumdrop</label> <input type="number" id="gumdrop-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="gumdrop-input">🔴 Gumdrop</label> <input type="number" id="gumdrop-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="satisfying-vial-input">🧴 Satisfying Vial</label> <input type="number" id="satisfying-vial-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="satisfying-vial-input">🧴 Satisfying Vial</label> <input type="number" id="satisfying-vial-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="invigorating-vial-input">💪 Invigorating Vial</label> <input type="number" id="invigorating-vial-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="invigorating-vial-input">💪 Invigorating Vial</label> <input type="number" id="invigorating-vial-input" placeholder="0" min="0">
       </div>
-      <div class="tracker-input-group"><label for="comforting-vial-input">🛡️ Comforting Vial</label> <input type="number" id="comforting-vial-input" placeholder="0" min="0">
+      <div class="tracker-input-group">
+       <label for="comforting-vial-input">🛡️ Comforting Vial</label> <input type="number" id="comforting-vial-input" placeholder="0" min="0">
       </div>
      </div>
     </section><!-- Beginner Masks Section -->
@@ -361,22 +383,17 @@
       <h3 class="text-3xl font-bold mb-4 text-green-300">🌱 Mặt Nạ Người Mới</h3>
       <p class="text-gray-300 mb-4">Những mặt nạ dễ chế tạo cho người chơi mới bắt đầu</p><span class="tier-badge" style="background: rgba(34, 197, 94, 0.3); color: #86efac; border: 1px solid #86efac;">✨ Người Mới</span>
      </div>
-     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Helmet -->
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Helmet -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">🪖</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🪖</span>
         <h4 class="text-xl font-bold text-green-300">Helmet</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">30.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">30.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>🍍</span> <span>5 Pineapples</span>
+        <div class="ingredient-item"><span>🍍</span> <span>5 Pineapples</span>
         </div>
-        <div class="ingredient-item">
-         <span>🌙</span> <span>1 Moon Charm</span>
+        <div class="ingredient-item"><span>🌙</span> <span>1 Moon Charm</span>
         </div>
        </div>
        <div class="location-tag">
@@ -390,22 +407,17 @@
        </div><button class="craft-button inactive" id="helmet-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
       </div><!-- Propeller Hat -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">🚁</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🚁</span>
         <h4 class="text-xl font-bold text-yellow-300">Propeller Hat</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">2.500.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">2.500.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>🍬</span> <span class="cost-highlight">25 Gumdrop</span>
+        <div class="ingredient-item"><span>🍬</span> <span class="cost-highlight">25 Gumdrop</span>
         </div>
-        <div class="ingredient-item">
-         <span>🍍</span> <span>100 Pineapples</span>
+        <div class="ingredient-item"><span>🍍</span> <span>100 Pineapples</span>
         </div>
-        <div class="ingredient-item">
-         <span>🌙</span> <span>5 Moon Charms</span>
+        <div class="ingredient-item"><span>🌙</span> <span>5 Moon Charms</span>
         </div>
        </div>
        <div class="location-tag">
@@ -425,28 +437,21 @@
       <h3 class="text-3xl font-bold mb-4 text-orange-300">⚔️ Mặt Nạ Trung Cấp</h3>
       <p class="text-gray-300 mb-4">Những mặt nạ cân bằng quyền lực và chi phí</p><span class="tier-badge tier-mid">💰 100 Triệu Mật Ong</span>
      </div>
-     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Honey Mask -->
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Honey Mask -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">🍯</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🍯</span>
         <h4 class="text-xl font-bold text-amber-300">Honey Mask</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>🍬</span> <span>9.999 Treats</span>
+        <div class="ingredient-item"><span>🍬</span> <span>9.999 Treats</span>
         </div>
-        <div class="ingredient-item">
-         <span>🛢️</span> <span>50 Oil</span>
+        <div class="ingredient-item"><span>🛢️</span> <span>50 Oil</span>
         </div>
-        <div class="ingredient-item">
-         <span>🧪</span> <span>25 Enzymes</span>
+        <div class="ingredient-item"><span>🧪</span> <span>25 Enzymes</span>
         </div>
-        <div class="ingredient-item">
-         <span>🥚</span> <span>5 Gold Eggs</span>
+        <div class="ingredient-item"><span>🥚</span> <span>5 Gold Eggs</span>
         </div>
        </div>
        <div class="location-tag">
@@ -460,25 +465,19 @@
        </div><button class="craft-button inactive" id="honey-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
       </div><!-- Fire Mask -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">🔥</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🔥</span>
         <h4 class="text-xl font-bold text-red-300">Fire Mask</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>🍓</span> <span>500 Strawberries</span>
+        <div class="ingredient-item"><span>🍓</span> <span>500 Strawberries</span>
         </div>
-        <div class="ingredient-item">
-         <span>🔴</span> <span>50 Red Extracts</span>
+        <div class="ingredient-item"><span>🔴</span> <span>50 Red Extracts</span>
         </div>
-        <div class="ingredient-item">
-         <span>🧪</span> <span>25 Enzymes</span>
+        <div class="ingredient-item"><span>🧪</span> <span>25 Enzymes</span>
         </div>
-        <div class="ingredient-item">
-         <span>💧</span> <span>15 Glue</span>
+        <div class="ingredient-item"><span>💧</span> <span>15 Glue</span>
         </div>
        </div>
        <div class="location-tag">
@@ -492,25 +491,19 @@
        </div><button class="craft-button inactive" id="fire-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
       </div><!-- Bubble Mask -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">🫧</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🫧</span>
         <h4 class="text-xl font-bold text-blue-300">Bubble Mask</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>🫐</span> <span>500 Blueberries</span>
+        <div class="ingredient-item"><span>🫐</span> <span>500 Blueberries</span>
         </div>
-        <div class="ingredient-item">
-         <span>🔵</span> <span>50 Blue Extracts</span>
+        <div class="ingredient-item"><span>🔵</span> <span>50 Blue Extracts</span>
         </div>
-        <div class="ingredient-item">
-         <span>🛢️</span> <span>25 Oil</span>
+        <div class="ingredient-item"><span>🛢️</span> <span>25 Oil</span>
         </div>
-        <div class="ingredient-item">
-         <span>✨</span> <span>15 Glitter</span>
+        <div class="ingredient-item"><span>✨</span> <span>15 Glitter</span>
         </div>
        </div>
        <div class="location-tag">
@@ -530,31 +523,23 @@
       <h3 class="text-3xl font-bold mb-4 text-red-300">👑 Mặt Nạ Cao Cấp</h3>
       <p class="text-gray-300 mb-4">Những mặt nạ mạnh nhất trong game - Yêu cầu nguyên liệu cực kỳ khó kiếm</p><span class="tier-badge tier-end">💎 5 Tỷ Mật Ong</span>
      </div>
-     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Gummy Mask -->
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Gummy Mask -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">🍬</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🍬</span>
         <h4 class="text-xl font-bold text-pink-300">Gummy Mask</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>💧</span> <span>250 Glue</span>
+        <div class="ingredient-item"><span>💧</span> <span>250 Glue</span>
         </div>
-        <div class="ingredient-item">
-         <span>🧪</span> <span>100 Enzymes</span>
+        <div class="ingredient-item"><span>🧪</span> <span>100 Enzymes</span>
         </div>
-        <div class="ingredient-item">
-         <span>🛢️</span> <span>100 Oil</span>
+        <div class="ingredient-item"><span>🛢️</span> <span>100 Oil</span>
         </div>
-        <div class="ingredient-item">
-         <span>✨</span> <span>100 Glitter</span>
+        <div class="ingredient-item"><span>✨</span> <span>100 Glitter</span>
         </div>
-        <div class="ingredient-item">
-         <span>🧴</span> <span>1 Satisfying Vial</span>
+        <div class="ingredient-item"><span>🧴</span> <span>1 Satisfying Vial</span>
         </div>
        </div>
        <div class="location-tag">
@@ -568,28 +553,21 @@
        </div><button class="craft-button inactive" id="gummy-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
       </div><!-- Diamond Mask -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">💎</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">💎</span>
         <h4 class="text-xl font-bold text-cyan-300">Diamond Mask</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>🔵</span> <span>250 Blue Extracts</span>
+        <div class="ingredient-item"><span>🔵</span> <span>250 Blue Extracts</span>
         </div>
-        <div class="ingredient-item">
-         <span>🛢️</span> <span>150 Oil</span>
+        <div class="ingredient-item"><span>🛢️</span> <span>150 Oil</span>
         </div>
-        <div class="ingredient-item">
-         <span>✨</span> <span>100 Glitter</span>
+        <div class="ingredient-item"><span>✨</span> <span>100 Glitter</span>
         </div>
-        <div class="ingredient-item">
-         <span>💎</span> <span>5 Diamond Eggs</span>
+        <div class="ingredient-item"><span>💎</span> <span>5 Diamond Eggs</span>
         </div>
-        <div class="ingredient-item">
-         <span>🛡️</span> <span>1 Comforting Vial</span>
+        <div class="ingredient-item"><span>🛡️</span> <span>1 Comforting Vial</span>
         </div>
        </div>
        <div class="location-tag">
@@ -603,28 +581,21 @@
        </div><button class="craft-button inactive" id="diamond-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
       </div><!-- Demon Mask -->
       <div class="mask-card rounded-xl p-6">
-       <div class="flex items-center gap-3 mb-4">
-        <span class="text-4xl">👿</span>
+       <div class="flex items-center gap-3 mb-4"><span class="text-4xl">👿</span>
         <h4 class="text-xl font-bold text-purple-300">Demon Mask</h4>
        </div>
        <div class="space-y-3">
-        <div class="ingredient-item">
-         <span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
+        <div class="ingredient-item"><span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
         </div>
-        <div class="ingredient-item">
-         <span>⚡</span> <span>500 Stingers</span>
+        <div class="ingredient-item"><span>⚡</span> <span>500 Stingers</span>
         </div>
-        <div class="ingredient-item">
-         <span>🔴</span> <span>250 Red Extracts</span>
+        <div class="ingredient-item"><span>🔴</span> <span>250 Red Extracts</span>
         </div>
-        <div class="ingredient-item">
-         <span>🧪</span> <span>150 Enzymes</span>
+        <div class="ingredient-item"><span>🧪</span> <span>150 Enzymes</span>
         </div>
-        <div class="ingredient-item">
-         <span>💧</span> <span>100 Glue</span>
+        <div class="ingredient-item"><span>💧</span> <span>100 Glue</span>
         </div>
-        <div class="ingredient-item">
-         <span>💪</span> <span>1 Invigorating Vial</span>
+        <div class="ingredient-item"><span>💪</span> <span>1 Invigorating Vial</span>
         </div>
        </div>
        <div class="location-tag">
@@ -914,9 +885,140 @@
       });
     }
 
+    // Export/Import functionality
+    function showNotification(message, type = 'success') {
+      const notifDiv = document.createElement('div');
+      const bgColor = type === 'success' ? '#10b981' : '#ef4444';
+      notifDiv.textContent = message;
+      notifDiv.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${bgColor}; color: white; padding: 14px 24px; border-radius: 8px; z-index: 2000; font-weight: 600; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);`;
+      document.body.appendChild(notifDiv);
+      setTimeout(() => notifDiv.remove(), 3000);
+    }
+
+    function exportData() {
+      const inventory = getInventory();
+      const dataText = JSON.stringify(inventory);
+      
+      // Fallback method: create textarea and copy
+      const textarea = document.createElement('textarea');
+      textarea.value = dataText;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      
+      try {
+        document.execCommand('copy');
+        showNotification('✅ Đã sao chép dữ liệu!', 'success');
+      } catch (err) {
+        showNotification('❌ Không thể sao chép. Vui lòng thử lại.', 'error');
+      }
+      
+      document.body.removeChild(textarea);
+    }
+
+    function importData() {
+      // Create modal container
+      const modal = document.createElement('div');
+      modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; 
+        z-index: 3000;`;
+      
+      // Create input container
+      const container = document.createElement('div');
+      container.style.cssText = `background: rgba(30, 27, 75, 0.95); border: 2px solid rgba(139, 92, 246, 0.8); 
+        border-radius: 8px; padding: 24px; width: 90%; max-width: 500px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        position: relative;`;
+      
+      // Create close button
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = '✕';
+      closeBtn.style.cssText = `position: absolute; top: 12px; right: 12px; background: none; border: none; 
+        color: #a7f3d0; font-size: 24px; cursor: pointer; padding: 0; width: 30px; height: 30px; 
+        display: flex; align-items: center; justify-content: center; transition: color 0.2s;`;
+      closeBtn.onmouseover = () => closeBtn.style.color = '#6ee7b7';
+      closeBtn.onmouseout = () => closeBtn.style.color = '#a7f3d0';
+      
+      // Create input field
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Dán dữ liệu của bạn tại đây...';
+      input.style.cssText = `width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(139, 92, 246, 0.4); 
+        border-radius: 6px; padding: 12px; color: #f3f4f6; font-size: 1rem; margin-bottom: 16px; 
+        box-sizing: border-box;`;
+      
+      container.appendChild(closeBtn);
+      container.appendChild(input);
+      modal.appendChild(container);
+      document.body.appendChild(modal);
+      input.focus();
+      
+      const closeModal = () => {
+        document.body.removeChild(modal);
+      };
+      
+      const handlePaste = (e) => {
+        if (e.key === 'Enter') {
+          const dataText = input.value.trim();
+          try {
+            const inventory = JSON.parse(dataText);
+            
+            const mapping = {
+              honey: 'honey-input',
+              goldEgg: 'gold-egg-input',
+              oil: 'oil-input',
+              enzymes: 'enzymes-input',
+              redExtract: 'red-extract-input',
+              stinger: 'stinger-input',
+              strawberry: 'strawberry-input',
+              blueExtract: 'blue-extract-input',
+              glitter: 'glitter-input',
+              blueberry: 'blueberry-input',
+              glue: 'glue-input',
+              diamondEgg: 'diamond-egg-input',
+              treats: 'treats-input',
+              pineapple: 'pineapple-input',
+              moonCharm: 'moon-charm-input',
+              gumdrop: 'gumdrop-input',
+              satisfyingVial: 'satisfying-vial-input',
+              invigoratingVial: 'invigorating-vial-input',
+              comfortingVial: 'comforting-vial-input'
+            };
+            
+            for (const [key, inputId] of Object.entries(mapping)) {
+              if (inventory.hasOwnProperty(key)) {
+                const inputEl = document.getElementById(inputId);
+                if (inputEl) {
+                  inputEl.value = inventory[key];
+                }
+              }
+            }
+            
+            updateAllProgress();
+            showNotification('✅ Đã dán dữ liệu thành công!', 'success');
+            closeModal();
+          } catch (err) {
+            showNotification('❌ Định dạng dữ liệu không hợp lệ!', 'error');
+          }
+        } else if (e.key === 'Escape') {
+          closeModal();
+        }
+      };
+      
+      input.addEventListener('keydown', handlePaste);
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
     // Initial render
     applyConfig(defaultConfig);
     attachInputListeners();
+    
+    // Attach export/import listeners
+    document.getElementById('export-btn').addEventListener('click', exportData);
+    document.getElementById('import-btn').addEventListener('click', importData);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db32f8342db4bac',t:'MTc3MzMyMjU2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db37e4170a0ddbd',t:'MTc3MzMyNTc4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
