@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bee Swarm Simulator - Công Thức Chế Tạo Mặt Nạ</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Outfit', sans-serif; }
+    
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #2d1b69 100%);
+      color: #f3f4f6;
+    }
+    
+    .tracker-section {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .tracker-input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .tracker-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .tracker-input-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #c7d2fe;
+    }
+    
+    .tracker-input-group input {
+      background: rgba(30, 27, 75, 0.8);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #f3f4f6;
+      font-size: 0.95rem;
+    }
+    
+    .tracker-input-group input:focus {
+      outline: none;
+      border-color: rgba(139, 92, 246, 0.8);
+      background: rgba(30, 27, 75, 0.95);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+    }
+    
+    .mask-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .mask-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(139, 92, 246, 0.8);
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+    }
+    
+    .completion-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    
+    .completion-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .completion-fill.incomplete {
+      background: linear-gradient(90deg, #f3f4f6, #e5e7eb);
+    }
+
+    .completion-fill.complete {
+      background: linear-gradient(90deg, #fbbf24, #fcd34d);
+    }
+    
+    .completion-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #a7f3d0;
+      margin-top: 6px;
+      text-align: center;
+    }
+    
+    .tier-section {
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .ingredient-item {
+      background: rgba(30, 27, 75, 0.6);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+    
+    .ingredient-item:hover {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.6);
+    }
+    
+    .cost-highlight {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+    
+    .tier-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .tier-mid {
+      background: rgba(249, 115, 22, 0.3);
+      color: #fb923c;
+      border: 1px solid #fb923c;
+    }
+    
+    .tier-end {
+      background: rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      border: 1px solid #f87171;
+    }
+    
+    .location-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(139, 92, 246, 0.3);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+    
+    .header-glow {
+      text-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+    }
+    
+    .scroll-smooth {
+      scroll-behavior: smooth;
+    }
+
+    .craft-button {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.5) 0%, rgba(99, 102, 241, 0.5) 100%);
+      border: 2px solid rgba(139, 92, 246, 0.6);
+      border-radius: 8px;
+      padding: 10px 16px;
+      color: #c7d2fe;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin-top: 12px;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .craft-button:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.7) 0%, rgba(99, 102, 241, 0.7) 100%);
+      border-color: rgba(139, 92, 246, 0.9);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .craft-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .craft-button.inactive {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .success-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .success-modal.show {
+      display: flex;
+    }
+
+    .success-content {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.2) 100%);
+      border: 3px solid rgba(251, 191, 36, 0.8);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      max-width: 500px;
+      animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .success-emoji {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: bounce 0.6s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .success-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fbbf24;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+    }
+
+    .success-mask-name {
+      font-size: 1.5rem;
+      color: #c7d2fe;
+      margin-bottom: 20px;
+    }
+
+    .success-message {
+      color: #e0e7ff;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .success-button {
+      background: linear-gradient(135deg, #fbbf24, #fcd34d);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e1b4b;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .success-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4);
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto scroll-smooth">
+  <div id="app" class="min-h-full w-full">
+   <!-- Header -->
+   <header class="text-center py-8 px-4 border-b border-purple-600/30">
+    <h1 id="app-title" class="text-4xl md:text-5xl font-bold mb-3 header-glow">🐝 Bee Swarm Simulator</h1>
+    <h2 id="section-label" class="text-2xl md:text-3xl font-semibold text-purple-300 mb-2">Công Thức Chế Tạo Mặt Nạ</h2>
+    <p class="text-gray-400 max-w-2xl mx-auto">Hướng dẫn chi tiết nguyên liệu cần để chế tạo các loại mặt nạ mạnh nhất trong game 🎭</p>
+   </header><!-- Content -->
+   <div class="max-w-6xl mx-auto p-4 md:p-8">
+    <!-- Tracker Section -->
+    <section class="tracker-section">
+     <h3 class="text-2xl font-bold mb-6 text-purple-300">📊 Theo dõi Tiến Trình Chế Tạo</h3>
+     <div class="tracker-input-row">
+      <div class="tracker-input-group"><label for="honey-input">💰 Honey</label> <input type="number" id="honey-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="gold-egg-input">🥚 Gold Egg</label> <input type="number" id="gold-egg-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="oil-input">🛢️ Oil</label> <input type="number" id="oil-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="enzymes-input">🧪 Enzymes</label> <input type="number" id="enzymes-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="red-extract-input">🔴 Red Extract</label> <input type="number" id="red-extract-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="stinger-input">⚡ Stinger</label> <input type="number" id="stinger-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="strawberry-input">🍓 Strawberry</label> <input type="number" id="strawberry-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="blue-extract-input">🔵 Blue Extract</label> <input type="number" id="blue-extract-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="glitter-input">✨ Glitter</label> <input type="number" id="glitter-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="blueberry-input">🫐 Blueberry</label> <input type="number" id="blueberry-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="glue-input">💧 Glue</label> <input type="number" id="glue-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="diamond-egg-input">💎 Diamond Egg</label> <input type="number" id="diamond-egg-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="treats-input">🍬 Treats</label> <input type="number" id="treats-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="pineapple-input">🍍 Pineapple</label> <input type="number" id="pineapple-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="moon-charm-input">🌙 Moon Charm</label> <input type="number" id="moon-charm-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="gumdrop-input">🔴 Gumdrop</label> <input type="number" id="gumdrop-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="satisfying-vial-input">🧴 Satisfying Vial</label> <input type="number" id="satisfying-vial-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="invigorating-vial-input">💪 Invigorating Vial</label> <input type="number" id="invigorating-vial-input" placeholder="0" min="0">
+      </div>
+      <div class="tracker-input-group"><label for="comforting-vial-input">🛡️ Comforting Vial</label> <input type="number" id="comforting-vial-input" placeholder="0" min="0">
+      </div>
+     </div>
+    </section><!-- Beginner Masks Section -->
+    <section class="tier-section mb-12">
+     <div class="mb-6">
+      <h3 class="text-3xl font-bold mb-4 text-green-300">🌱 Mặt Nạ Người Mới</h3>
+      <p class="text-gray-300 mb-4">Những mặt nạ dễ chế tạo cho người chơi mới bắt đầu</p><span class="tier-badge" style="background: rgba(34, 197, 94, 0.3); color: #86efac; border: 1px solid #86efac;">✨ Người Mới</span>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Helmet -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">🪖</span>
+        <h4 class="text-xl font-bold text-green-300">Helmet</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">30.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🍍</span> <span>5 Pineapples</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🌙</span> <span>1 Moon Charm</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Noob Bear's Shop
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="helmet-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="helmet-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="helmet-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div><!-- Propeller Hat -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">🚁</span>
+        <h4 class="text-xl font-bold text-yellow-300">Propeller Hat</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">2.500.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🍬</span> <span class="cost-highlight">25 Gumdrop</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🍍</span> <span>100 Pineapples</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🌙</span> <span>5 Moon Charms</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Pro Bear's Shop
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="propeller-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="propeller-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="propeller-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div>
+     </div>
+    </section><!-- Content -->
+    <section class="tier-section mb-12">
+     <div class="mb-6">
+      <h3 class="text-3xl font-bold mb-4 text-orange-300">⚔️ Mặt Nạ Trung Cấp</h3>
+      <p class="text-gray-300 mb-4">Những mặt nạ cân bằng quyền lực và chi phí</p><span class="tier-badge tier-mid">💰 100 Triệu Mật Ong</span>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Honey Mask -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">🍯</span>
+        <h4 class="text-xl font-bold text-amber-300">Honey Mask</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🍬</span> <span>9.999 Treats</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🛢️</span> <span>50 Oil</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🧪</span> <span>25 Enzymes</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🥚</span> <span>5 Gold Eggs</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Ace Shop
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="honey-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="honey-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="honey-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div><!-- Fire Mask -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">🔥</span>
+        <h4 class="text-xl font-bold text-red-300">Fire Mask</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🍓</span> <span>500 Strawberries</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🔴</span> <span>50 Red Extracts</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🧪</span> <span>25 Enzymes</span>
+        </div>
+        <div class="ingredient-item">
+         <span>💧</span> <span>15 Glue</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Red HQ
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="fire-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="fire-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="fire-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div><!-- Bubble Mask -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">🫧</span>
+        <h4 class="text-xl font-bold text-blue-300">Bubble Mask</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">100.000.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🫐</span> <span>500 Blueberries</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🔵</span> <span>50 Blue Extracts</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🛢️</span> <span>25 Oil</span>
+        </div>
+        <div class="ingredient-item">
+         <span>✨</span> <span>15 Glitter</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Blue HQ
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="bubble-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="bubble-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="bubble-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div>
+     </div>
+    </section><!-- End-game Masks Section -->
+    <section class="tier-section">
+     <div class="mb-6">
+      <h3 class="text-3xl font-bold mb-4 text-red-300">👑 Mặt Nạ Cao Cấp</h3>
+      <p class="text-gray-300 mb-4">Những mặt nạ mạnh nhất trong game - Yêu cầu nguyên liệu cực kỳ khó kiếm</p><span class="tier-badge tier-end">💎 5 Tỷ Mật Ong</span>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Gummy Mask -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">🍬</span>
+        <h4 class="text-xl font-bold text-pink-300">Gummy Mask</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>💧</span> <span>250 Glue</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🧪</span> <span>100 Enzymes</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🛢️</span> <span>100 Oil</span>
+        </div>
+        <div class="ingredient-item">
+         <span>✨</span> <span>100 Glitter</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🧴</span> <span>1 Satisfying Vial</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Gummy Bear's Lair
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="gummy-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="gummy-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="gummy-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div><!-- Diamond Mask -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">💎</span>
+        <h4 class="text-xl font-bold text-cyan-300">Diamond Mask</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🔵</span> <span>250 Blue Extracts</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🛢️</span> <span>150 Oil</span>
+        </div>
+        <div class="ingredient-item">
+         <span>✨</span> <span>100 Glitter</span>
+        </div>
+        <div class="ingredient-item">
+         <span>💎</span> <span>5 Diamond Eggs</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🛡️</span> <span>1 Comforting Vial</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Moon Obby
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="diamond-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="diamond-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="diamond-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div><!-- Demon Mask -->
+      <div class="mask-card rounded-xl p-6">
+       <div class="flex items-center gap-3 mb-4">
+        <span class="text-4xl">👿</span>
+        <h4 class="text-xl font-bold text-purple-300">Demon Mask</h4>
+       </div>
+       <div class="space-y-3">
+        <div class="ingredient-item">
+         <span>💰</span> <span class="cost-highlight">5.000.000.000 Honey</span>
+        </div>
+        <div class="ingredient-item">
+         <span>⚡</span> <span>500 Stingers</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🔴</span> <span>250 Red Extracts</span>
+        </div>
+        <div class="ingredient-item">
+         <span>🧪</span> <span>150 Enzymes</span>
+        </div>
+        <div class="ingredient-item">
+         <span>💧</span> <span>100 Glue</span>
+        </div>
+        <div class="ingredient-item">
+         <span>💪</span> <span>1 Invigorating Vial</span>
+        </div>
+       </div>
+       <div class="location-tag">
+        📍 Lava Obby
+       </div>
+       <div class="completion-bar">
+        <div class="completion-fill" id="demon-mask-fill" style="width: 0%"></div>
+       </div>
+       <div class="completion-text" id="demon-mask-text">
+        0%
+       </div><button class="craft-button inactive" id="demon-mask-craft" disabled> 🔨 Chế Tạo Mặt Nạ </button>
+      </div>
+     </div>
+    </section><!-- Footer Info -->
+    <div class="mt-12 p-6 rounded-xl bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-600/40">
+     <h4 class="text-lg font-bold mb-3 text-purple-300">💡 Mẹo Chế Tạo Mặt Nạ:</h4>
+     <ul class="space-y-2 text-gray-300">
+      <li>✓ Hãy tích lũy nhiều Honey trước khi chế tạo mặt nạ cao cấp</li>
+      <li>✓ Các nguyên liệu hiếm có thể được tìm thấy thông qua các hoạt động hàng ngày</li>
+      <li>✓ Một số nguyên liệu chỉ có sẵn trong các tường hành</li>
+      <li>✓ Mặt nạ cao cấp cung cấp những buff mạnh mẽ - Kiên nhẫn là chìa khóa!</li>
+     </ul>
+    </div>
+   </div>
+  </div><!-- Success Modal -->
+  <div id="success-modal" class="success-modal">
+   <div class="success-content">
+    <div class="success-emoji" id="success-emoji">
+     ✨
+    </div>
+    <div class="success-title">
+     Chúc Mừng!
+    </div>
+    <div class="success-mask-name" id="success-mask-name">
+     Mặt Nạ Mật Ong
+    </div>
+    <div class="success-message">
+     Bạn đã thành công chế tạo mặt nạ! 🎉
+    </div><button class="success-button" onclick="closeSuccessModal()">↩️ Quay Lại</button>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "🐝 Bee Swarm Simulator",
+      section_label: "Công Thức Chế Tạo Mặt Nạ",
+      background_color: "#0f172a",
+      surface_color: "#1e1b4b",
+      text_color: "#f3f4f6",
+      primary_color: "#8b5cf6",
+      secondary_color: "#ec4899",
+      font_family: "Outfit",
+      font_size: 16
+    };
+
+    // Mask requirements
+    const maskRequirements = {
+      'helmet-mask': { honey: 30000, pineapple: 5, moonCharm: 1, name: '🪖 Helmet', emoji: '🪖' },
+      'propeller-mask': { honey: 2500000, gumdrop: 25, pineapple: 100, moonCharm: 5, name: '🚁 Propeller Hat', emoji: '🚁' },
+      'honey-mask': { honey: 100000000, treats: 9999, oil: 50, enzymes: 25, goldEgg: 5, name: '🍯 Honey Mask', emoji: '🍯' },
+      'fire-mask': { honey: 100000000, strawberry: 500, redExtract: 50, enzymes: 25, glue: 15, name: '🔥 Fire Mask', emoji: '🔥' },
+      'bubble-mask': { honey: 100000000, blueberry: 500, blueExtract: 50, oil: 25, glitter: 15, name: '🫧 Bubble Mask', emoji: '🫧' },
+      'gummy-mask': { honey: 5000000000, glue: 250, enzymes: 100, oil: 100, glitter: 100, satisfyingVial: 1, name: '🍬 Gummy Mask', emoji: '🍬' },
+      'diamond-mask': { honey: 5000000000, blueExtract: 250, oil: 150, glitter: 100, diamondEgg: 5, comfortingVial: 1, name: '💎 Diamond Mask', emoji: '💎' },
+      'demon-mask': { honey: 5000000000, stinger: 500, redExtract: 250, enzymes: 150, glue: 100, invigoratingVial: 1, name: '👿 Demon Mask', emoji: '👿' }
+    };
+
+    function getInventory() {
+      return {
+        honey: parseInt(document.getElementById('honey-input').value) || 0,
+        goldEgg: parseInt(document.getElementById('gold-egg-input').value) || 0,
+        oil: parseInt(document.getElementById('oil-input').value) || 0,
+        enzymes: parseInt(document.getElementById('enzymes-input').value) || 0,
+        redExtract: parseInt(document.getElementById('red-extract-input').value) || 0,
+        stinger: parseInt(document.getElementById('stinger-input').value) || 0,
+        strawberry: parseInt(document.getElementById('strawberry-input').value) || 0,
+        blueExtract: parseInt(document.getElementById('blue-extract-input').value) || 0,
+        glitter: parseInt(document.getElementById('glitter-input').value) || 0,
+        blueberry: parseInt(document.getElementById('blueberry-input').value) || 0,
+        glue: parseInt(document.getElementById('glue-input').value) || 0,
+        diamondEgg: parseInt(document.getElementById('diamond-egg-input').value) || 0,
+        treats: parseInt(document.getElementById('treats-input').value) || 0,
+        pineapple: parseInt(document.getElementById('pineapple-input').value) || 0,
+        moonCharm: parseInt(document.getElementById('moon-charm-input').value) || 0,
+        gumdrop: parseInt(document.getElementById('gumdrop-input').value) || 0,
+        satisfyingVial: parseInt(document.getElementById('satisfying-vial-input').value) || 0,
+        invigoratingVial: parseInt(document.getElementById('invigorating-vial-input').value) || 0,
+        comfortingVial: parseInt(document.getElementById('comforting-vial-input').value) || 0
+      };
+    }
+
+    function calculateCompletion(maskId) {
+      const requirements = maskRequirements[maskId];
+      const inventory = getInventory();
+      
+      let totalProgress = 0;
+      let ingredientCount = 0;
+      
+      for (const [ingredient, required] of Object.entries(requirements)) {
+        if (ingredient === 'name' || ingredient === 'emoji') continue;
+        ingredientCount++;
+        const have = inventory[ingredient] || 0;
+        const progress = Math.min((have / required) * 100, 100);
+        totalProgress += progress;
+      }
+      
+      const completion = ingredientCount > 0 ? Math.round(totalProgress / ingredientCount) : 0;
+      return completion;
+    }
+
+    function updateAllProgress() {
+      const masks = ['helmet-mask', 'propeller-mask', 'honey-mask', 'fire-mask', 'bubble-mask', 'gummy-mask', 'diamond-mask', 'demon-mask'];
+      
+      masks.forEach(maskId => {
+        const percentage = calculateCompletion(maskId);
+        const fillElement = document.getElementById(`${maskId}-fill`);
+        const textElement = document.getElementById(`${maskId}-text`);
+        const craftButton = document.getElementById(`${maskId}-craft`);
+        
+        if (fillElement && textElement && craftButton) {
+          fillElement.style.width = percentage + '%';
+          textElement.textContent = percentage + '%';
+          
+          // Update color based on completion status
+          fillElement.classList.remove('incomplete', 'complete');
+          if (percentage === 100) {
+            fillElement.classList.add('complete');
+            craftButton.classList.remove('inactive');
+            craftButton.disabled = false;
+          } else {
+            fillElement.classList.add('incomplete');
+            craftButton.classList.add('inactive');
+            craftButton.disabled = true;
+          }
+        }
+      });
+    }
+
+    // Add event listeners to all inputs
+    function attachInputListeners() {
+      const inputs = document.querySelectorAll('.tracker-input-group input');
+      inputs.forEach(input => {
+        input.addEventListener('input', updateAllProgress);
+      });
+
+    // Add craft button listeners
+      const masks = ['helmet-mask', 'propeller-mask', 'honey-mask', 'fire-mask', 'bubble-mask', 'gummy-mask', 'diamond-mask', 'demon-mask'];
+      masks.forEach(maskId => {
+        const craftButton = document.getElementById(`${maskId}-craft`);
+        if (craftButton) {
+          craftButton.addEventListener('click', () => showSuccessModal(maskId));
+        }
+      });
+    }
+
+    function showSuccessModal(maskId) {
+      const maskData = maskRequirements[maskId];
+      const requirements = maskRequirements[maskId];
+      const inventory = getInventory();
+      
+      // Subtract ingredients from inputs
+      for (const [ingredient, required] of Object.entries(requirements)) {
+        if (ingredient === 'name' || ingredient === 'emoji') continue;
+        
+        const inputId = getInputIdFromIngredient(ingredient);
+        const inputElement = document.getElementById(inputId);
+        
+        if (inputElement) {
+          const currentValue = parseInt(inputElement.value) || 0;
+          const newValue = Math.max(0, currentValue - required);
+          inputElement.value = newValue;
+        }
+      }
+      
+      // Update progress after subtracting
+      updateAllProgress();
+      
+      // Show success modal
+      document.getElementById('success-emoji').textContent = maskData.emoji;
+      document.getElementById('success-mask-name').textContent = maskData.name;
+      document.getElementById('success-modal').classList.add('show');
+    }
+    
+    function getInputIdFromIngredient(ingredient) {
+      const mapping = {
+        honey: 'honey-input',
+        goldEgg: 'gold-egg-input',
+        oil: 'oil-input',
+        enzymes: 'enzymes-input',
+        redExtract: 'red-extract-input',
+        stinger: 'stinger-input',
+        strawberry: 'strawberry-input',
+        blueExtract: 'blue-extract-input',
+        glitter: 'glitter-input',
+        blueberry: 'blueberry-input',
+        glue: 'glue-input',
+        diamondEgg: 'diamond-egg-input',
+        treats: 'treats-input',
+        pineapple: 'pineapple-input',
+        moonCharm: 'moon-charm-input',
+        gumdrop: 'gumdrop-input',
+        satisfyingVial: 'satisfying-vial-input',
+        invigoratingVial: 'invigorating-vial-input',
+        comfortingVial: 'comforting-vial-input'
+      };
+      return mapping[ingredient] || '';
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('success-modal').classList.remove('show');
+    }
+
+    function applyConfig(config) {
+      const cfg = { ...defaultConfig, ...config };
+
+      // Apply colors
+      document.body.style.background = `linear-gradient(135deg, ${cfg.background_color} 0%, ${cfg.surface_color} 50%, #2d1b69 100%)`;
+      document.body.style.color = cfg.text_color;
+
+      // Apply text
+      document.getElementById('app-title').textContent = cfg.app_title;
+      document.getElementById('section-label').textContent = cfg.section_label;
+
+      // Apply font
+      document.body.style.fontFamily = `${cfg.font_family}, sans-serif`;
+
+      // Apply font size scaling
+      const baseSize = cfg.font_size;
+      document.getElementById('app-title').style.fontSize = `${baseSize * 3}px`;
+      document.getElementById('section-label').style.fontSize = `${baseSize * 1.9}px`;
+
+      // Update mask cards
+      document.querySelectorAll('.mask-card').forEach(card => {
+        card.style.borderColor = `rgba(${hexToRgb(cfg.primary_color)}, 0.4)`;
+      });
+    }
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : "139, 92, 246";
+    }
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          applyConfig(config);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["section_label", config.section_label || defaultConfig.section_label],
+          ["tracker_title", "Theo dõi Tiến Trình Chế Tạo"]
+        ])
+      });
+    }
+
+    // Initial render
+    applyConfig(defaultConfig);
+    attachInputListeners();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db32f8342db4bac',t:'MTc3MzMyMjU2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
